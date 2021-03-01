@@ -7,26 +7,46 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
 public class Employee {
     public  static  void writeObjectToCSV(PrintWriter writer, List<Employees> employees) throws IOException {
-        try (
-                CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
-                        .withHeader("Emp_id", "FirstName", "LastName","Gender",
-                                "dob","pan_num",	"aadhaar_num",	"mobile_num"));
-        ){
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        try (CSVPrinter csvPrinter =
+        new CSVPrinter(
+            writer,
+            CSVFormat.DEFAULT.withHeader(
+                "Emp_id",
+                "Name",
+                "doj",
+                "Post_name",
+                "Level",
+                "Mobile_num",
+                "Personal mail",
+                "Office_mail",
+                "Dob",
+                "Blood_group",
+                "mobile_num",
+                "aadhaar_num")); ) {
             for(Employees empl : employees){
+
               List<? extends Serializable> data =  Arrays.asList(
                       empl.getEmp_id(),
-                      empl.getFirst_name(),
-                      empl.getLast_name(),
-                      empl.getGender(),
-                      empl.getDob(),
+                      empl.getFirst_name().concat(empl.getLast_name()),
+                     df.format(empl.getDoj()),
+                      empl.getPost_name(),
+                      empl.getEmp_level(),
+                      empl.getMobile_num(),
+                      empl.getEmail_id(),
+                      empl.getOffice_mail(),
+                      df.format(empl.getDob()),
+                      empl.getBlood_group(),
                       empl.getPan_num(),
-                      empl.getAadhaar_num(),
-                      empl.getMobile_num()
+                      empl.getAadhaar_num()
+
 
               );
                 csvPrinter.printRecord(data);

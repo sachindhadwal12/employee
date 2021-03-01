@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,6 +16,7 @@ public class EmployeesServiceImpl implements EmployeesService{
 
     @Autowired
     EmployeesRepository repository;
+
 
     @Override
     public Employees addEmployee(Employees employees) throws EmployeeAlreadyExitsException {
@@ -28,7 +30,8 @@ public class EmployeesServiceImpl implements EmployeesService{
 
     @Override
     public List<Employees> getAllEmployees() {
-        return repository.findAll();
+        return  repository.findAll();
+
     }
 
     @Override
@@ -45,4 +48,11 @@ public class EmployeesServiceImpl implements EmployeesService{
     public Employees updateEmployee(Employees employees) {
         return repository.save(employees);
     }
+
+    @Override
+    public Employees findById(int emp_id) {
+        return repository.findById(emp_id);
+    }
+
+
 }

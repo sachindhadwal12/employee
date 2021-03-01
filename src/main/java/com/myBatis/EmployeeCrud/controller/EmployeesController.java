@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EmployeesController {
 
     @Autowired
@@ -30,7 +32,8 @@ public class EmployeesController {
     @GetMapping("employees")
     public List<Employees> getAllEmployees(){
         log.info("All details fetched from database");
-        return service.getAllEmployees();
+        return  service.getAllEmployees();
+
     }
     @GetMapping("/download/employees.csv")
     public void downloadCSV(HttpServletResponse response) throws IOException {
@@ -48,14 +51,19 @@ public class EmployeesController {
     public ResponseEntity<Employees> saveEmployee(@RequestBody Employees employees) throws EmployeeAlreadyExitsException {
         return new ResponseEntity<Employees>(service.addEmployee(employees), HttpStatus.CREATED);
     }
-    @DeleteMapping("/employee/{emp_id}")
-    public ResponseEntity<Employees> deleteByEmpId(@PathVariable int emp_id){
+    @DeleteMapping("employee/{emp_id}")
+    public void deleteByEmpId(@PathVariable int emp_id){
         service.deleteEmployee(emp_id);
-        return ResponseEntity.noContent().build();
+
     }
     @PutMapping("employees")
     public ResponseEntity<Employees> updateEmployee(@RequestBody Employees employees){
       return new ResponseEntity<Employees>(service.updateEmployee(employees),HttpStatus.CREATED);
+    }
+
+    @GetMapping("employee/{emp_id}")
+  public  ResponseEntity<Employees> findByID(@PathVariable int emp_id){
+        return new ResponseEntity<Employees>(service.findById(emp_id),HttpStatus.OK);
     }
 
 
